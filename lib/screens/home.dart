@@ -15,111 +15,139 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<Movie> list = [];
+  List<Movie> listBig = [];
+
+  @override
+  void initState() {
+    Movie.getData(Type.popular).then((valueBig) {
+      Movie.getData(Type.top250).then((value) {
+        setState(() {
+          listBig = valueBig;
+          list = value;
+        });
+      });
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (list.isNotEmpty) list = list.sublist(0, 4);
+    if (list.isNotEmpty) list = list.sublist(0, 9);
+    if (list.isNotEmpty) listBig = listBig.reversed.toList().sublist(0, 4);
 
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          vertical: MediaQuery.of(context).padding.top,
-          horizontal: 24.w,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Material(
+      child: Scaffold(
+        body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: MediaQuery.of(context).padding.top * 1.5,
+              horizontal: 24.w,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Moviez',
-                      style: TextStyle(
-                        fontSize: 28.sp,
-                        fontWeight: FontWeight.w700,
+                SizedBox(
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'Moviez',
+                            style: TextStyle(
+                              fontSize: 28.sp,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 8.h,
+                          ),
+                          Text(
+                            'Watch much easier',
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(
-                      height: 8.h,
-                    ),
-                    Text(
-                      'Watch much easier',
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w300,
+                      IconButton(
+                        onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Search(moviesAvailable: list),
+                          ),
+                        ),
+                        icon: const Icon(
+                          Icons.search,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                IconButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Search(moviesAvailable: list),
+                SizedBox(
+                  height: 30.h,
+                ),
+                SizedBox(
+                  height: 250.h,
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    clipBehavior: Clip.none,
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    itemBuilder: (context, i) {
+                      return BigMovieCard(
+                        crew: listBig[i].crew,
+                        image: NetworkImage(listBig[i].imageUrl),
+                        rating: double.parse(listBig[i].rating),
+                        title: listBig[i].title,
+                      );
+                    },
+                    itemCount: listBig.length,
+                    separatorBuilder: (_, i) => SizedBox(
+                      width: 20.w,
                     ),
                   ),
-                  icon: const Icon(
-                    Icons.search,
-                    color: Colors.black,
+                ),
+                SizedBox(
+                  height: 25.h,
+                ),
+                Text(
+                  'From Disney',
+                  style: TextStyle(
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                Flexible(
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, i) {
+                      return SmallMovieCard(
+                        crew: list[i].crew,
+                        image: NetworkImage(list[i].imageUrl),
+                        rating: double.parse(list[i].rating),
+                        title: list[i].title,
+                      );
+                    },
+                    itemCount: list.length,
+                    separatorBuilder: (_, i) => SizedBox(
+                      height: 15.h,
+                    ),
                   ),
                 ),
               ],
             ),
-            SizedBox(
-              height: 30.h,
-            ),
-            ListView.separated(
-              clipBehavior: Clip.none,
-              scrollDirection: Axis.horizontal,
-              physics: const BouncingScrollPhysics(),
-              itemBuilder: (context, i) {
-                return Padding(
-                  padding: i == 0
-                      ? EdgeInsets.only(left: 24.w)
-                      : const EdgeInsets.all(0),
-                  child: BigMovieCard(
-                    crew: list[i].crew,
-                    image: NetworkImage(list[i].imageUrl),
-                    rating: double.parse(list[i].rating),
-                    title: list[i].title,
-                  ),
-                );
-              },
-              itemCount: list.length,
-              separatorBuilder: (_, i) => SizedBox(
-                height: 15.h,
-              ),
-            ),
-            Text(
-              'From Disney',
-              style: TextStyle(
-                fontSize: 28.sp,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            SizedBox(
-              height: 30.h,
-            ),
-            ListView.separated(
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, i) {
-                return SmallMovieCard(
-                  crew: list[i].crew,
-                  image: NetworkImage(list[i].imageUrl),
-                  rating: double.parse(list[i].rating),
-                  title: list[i].title,
-                );
-              },
-              itemCount: list.length,
-              separatorBuilder: (_, i) => SizedBox(
-                height: 15.h,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

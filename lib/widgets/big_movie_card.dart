@@ -18,47 +18,54 @@ class BigMovieCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        BigImageCard(image: image),
-        SizedBox(
-          height: 25.h,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w600,
+    return SizedBox(
+      width: MediaQuery.of(context).size.width - 24.w * 2,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          BigImageCard(image: image),
+          SizedBox(
+            height: 25.h,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 4.h,
-                ),
-                Text(
-                  "${crew.split(',').sublist(0, 1).first} ${crew.split(',').sublist(0, 1).last}",
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.grey.shade400,
+                  SizedBox(
+                    height: 8.h,
                   ),
-                ),
-              ],
-            ),
-            Stars(
-              rating: rating,
-            ),
-          ],
-        )
-      ],
+                  SizedBox(
+                    width: 150.w,
+                    child: Text(
+                      "${crew.split(',').sublist(0, 1).first} ${crew.split(',').sublist(0, 1).last}",
+                      maxLines: 2,
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w300,
+                        color: Colors.grey.shade400,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Stars(
+                rating: rating,
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

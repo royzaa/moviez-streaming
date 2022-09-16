@@ -8,12 +8,13 @@ class SuggestButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color buttonColor = const Color.fromRGBO(13, 8, 70, 0);
-    Color shadowColor = const Color.fromRGBO(196, 200, 215, 0);
+    Color buttonColor = const Color.fromRGBO(13, 8, 70, 1);
+    Color shadowColor = const Color.fromRGBO(196, 200, 215, 1);
     return ElevatedButton(
       onPressed: () {},
       style: ElevatedButton.styleFrom(
         shadowColor: shadowColor,
+        padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 30.w),
         primary: buttonColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(buttonRadius),

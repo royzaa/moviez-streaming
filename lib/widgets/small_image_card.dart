@@ -16,7 +16,10 @@ class SmallImageCard extends StatelessWidget {
       height: 125.6.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(smallRadius),
-        image: DecorationImage(image: image),
+        image: DecorationImage(
+          image: image,
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }

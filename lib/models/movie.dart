@@ -24,11 +24,12 @@ class Movie {
       crew: map['crew'],
       imageUrl: map['image'],
       rating: map['imDbRating'],
-      title: map['tite'],
+      title: map['title'],
     );
   }
 
-  Future<List<Movie>> getData(Type type) async {
+  /// IMDB API limit: 100 request per day
+  static Future<List<Movie>> getData(Type type) async {
     final url = type == Type.top250
         ? 'https://imdb-api.com/en/API/Top250Movies/$apiKey'
         : 'https://imdb-api.com/en/API/MostPopularMovies/$apiKey';
@@ -40,9 +41,11 @@ class Movie {
     if (response.statusCode == 200) {
       final jsonData = jsonDecode(response.body);
       final List<dynamic> data = jsonData['items'];
-      for (var e in data) {
+      final String errorMsg = jsonData['errorMessage'];
+      for (var e in data.sublist(0, 15)) {
         list.add(Movie.fromJson(e));
       }
+      debugPrint(errorMsg);
     } else {
       debugPrint(response.statusCode.toString());
     }

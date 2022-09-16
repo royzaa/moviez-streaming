@@ -17,12 +17,14 @@ class BigImageCard extends StatefulWidget {
 
 class _BigImageCardState extends State<BigImageCard> {
   Color initColor = Colors.grey.shade200;
-  late Color mainColor;
+  Color? mainColor;
 
   void getDomColor(ImageProvider image) async {
     final generator = await PaletteGenerator.fromImageProvider(image);
     if (generator.colors.isNotEmpty) {
-      mainColor = generator.colors.first;
+      setState(() {
+        mainColor = generator.colors.first;
+      });
     }
   }
 
@@ -34,23 +36,31 @@ class _BigImageCardState extends State<BigImageCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 300.w,
-      height: 200.h,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: widget.image,
-          fit: BoxFit.cover,
-          filterQuality: FilterQuality.medium,
-        ),
-        borderRadius: BorderRadius.circular(bigRadius),
-        boxShadow: [
-          BoxShadow(
-            color: mainColor.withOpacity(0.6),
-            blurRadius: 40,
-          ),
-        ],
-      ),
-    );
+    final Size size = MediaQuery.of(context).size;
+    return mainColor == null
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : Container(
+            width: size.width,
+            height: 160.h,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: widget.image,
+                fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
+                filterQuality: FilterQuality.high,
+                scale: 1.0,
+              ),
+              borderRadius: BorderRadius.circular(bigRadius),
+              boxShadow: [
+                BoxShadow(
+                  color: mainColor!.withOpacity(0.5),
+                  blurRadius: 40,
+                  offset: Offset(0, 15.h),
+                ),
+              ],
+            ),
+          );
   }
 }

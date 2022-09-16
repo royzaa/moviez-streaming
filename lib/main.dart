@@ -26,7 +26,9 @@ class MyApp extends StatelessWidget {
             fontFamily: 'Avenir',
             primarySwatch: Colors.blueGrey,
           ),
-          child: const Home(),
+          child: const MaterialApp(
+            home: Home(),
+          ),
         );
       }),
       title: 'Moviez Streaming',

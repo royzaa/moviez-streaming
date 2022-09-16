@@ -26,23 +26,32 @@ class SmallMovieCard extends StatelessWidget {
           width: 10.w,
         ),
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w600,
+            SizedBox(
+              width: 210.w,
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
             SizedBox(
               height: 4.h,
             ),
-            Text(
-              "${crew.split(',').sublist(0, 1).first} ${crew.split(',').sublist(0, 1).last}",
-              style: TextStyle(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w300,
-                color: Colors.grey.shade400,
+            SizedBox(
+              width: 210.w,
+              child: Text(
+                "${crew.split(',').sublist(0, 1).first} ${crew.split(',').sublist(0, 1).last}",
+                maxLines: 2,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  overflow: TextOverflow.ellipsis,
+                  fontWeight: FontWeight.w300,
+                  color: Colors.grey.shade400,
+                ),
               ),
             ),
             SizedBox(
